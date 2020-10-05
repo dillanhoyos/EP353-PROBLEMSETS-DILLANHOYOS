@@ -33,6 +33,7 @@ Print the original loudness level and the converted amplitude value using printf
 Here is an example output:
 
   The Loudness of -70dB is 0.0003548.
+  
 ###Problem 3.2: Conditions
 Create a file named ProblemSet3.2.c.
 
@@ -53,6 +54,7 @@ You do not need to use scanf for this problem.
 Here is an example print output from this program:
 
   A note 'D' translates to 2 in pitch class.
+  
 ###Problem 3.3: Loop
 Create a file named ProblemSet3.3.c.
 
@@ -68,4 +70,7 @@ You do not need to use scanf for this problem.
 
 Here is an example print output for this program:
 
-  C Db D Eb E F Gb G Ab A Bb B
+  C Db D Eb E F Gb G Ab A Bb B.
+  
+### COMMENTS
+Great problemset I like the Audio Programing Book. 
