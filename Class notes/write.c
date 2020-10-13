@@ -2,7 +2,9 @@
 
 int main (){
 
-    FILE*textFile;
+    FILE *readFile, *writeFile;
+    
+    readFile = fopen("LoremIpsum.txt","r");
     return 0;
     //open text File
     textFile = fcreate("blah.txt", "w");

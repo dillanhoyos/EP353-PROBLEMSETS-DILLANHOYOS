@@ -8,10 +8,6 @@ int main()
     int pc1;
 
 
-
-
-
-
     switch (note) {
         case 'C': pc1 = 0;
         
@@ -29,22 +25,13 @@ int main()
     printf("A note '%c' translates\n ", note);
     printf( "to %i in pitch class\n", pc1);
     
-    break;
+    break;  
 
-
-
-       
-       
-
-       
         default:
            printf("MIDI note %d is not in the range of MIDI.\n", note);
     }
-    
 
- 
-
-    return 0;
+  return 0;
 
 }
 

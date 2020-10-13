@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-
+//had to initialize all values to -1 because the ++ in the printf would print all numbers starting to add with 1
 void increment();
 int global = -1;
 
@@ -13,10 +13,6 @@ void increment(){
     }
 
    
-
-
-
-
 int main(){
 
 

@@ -32,7 +32,7 @@ int main() {
 
 sumup(number, sum, i) ;
 
-
+// only found the solution by outputting all stages of the sum, the actual sum is at last
 
     
   

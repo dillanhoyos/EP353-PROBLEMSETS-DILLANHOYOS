@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "QUIZ.C": "cpp"
+        "QUIZ.C": "cpp",
+        "sstream": "c"
     }
 }

@@ -6,11 +6,10 @@ int main()
 
 
 
-    for (note = 0; note < 12; note++){
+for (note = 0; note < 12; note++){
 
-    
 
-switch (note)
+    switch (note)
 {
 case 0: printf("Db");
 case 1: printf("D");
