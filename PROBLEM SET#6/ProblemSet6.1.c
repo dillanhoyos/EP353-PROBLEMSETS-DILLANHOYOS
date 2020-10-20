@@ -23,12 +23,10 @@ void adjustMIDIRange(char *midi){
    int d = 0;
    int t = 127;
 
-   
-
-if (*midi < d){
+if (*midi < d){//comparison for range of less than 0
     *midi = t;
 }
-else if(*midi > t){
+else if(*midi > t){//comparison for range of more than 127
     *midi = d;
 }
 
