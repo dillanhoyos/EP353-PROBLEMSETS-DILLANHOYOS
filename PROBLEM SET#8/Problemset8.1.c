@@ -3,6 +3,9 @@
 #include <string.h>
 #include <sndfile.h> 
 
+#define kBufferSize 4096
+
+
 //Compile this code using:
 //clang 3.libsndfileExercise.c -o 3.libsndfileExercise -lsndfile
 
@@ -12,6 +15,7 @@ int main(void) {
   float *buffer;
 
   long bufferSize = 0;
+ 
   
 
   //Initialize SF_INFO with 0s (memset is in string.h library)
@@ -31,9 +35,10 @@ int main(void) {
 		printf("Invalid encoding\n");
 		return 1;
 	}
-  sfInfo.frames = sfInfo.frames*5;
+  sfInfo.frames = sfInfo.frames;
   
   buffer = (float *) malloc(sfInfo.frames * sizeof(float));
+
   // Need to retain this info before opening another file
   bufferSize = sfInfo.frames;
   
@@ -51,11 +56,26 @@ int main(void) {
 		puts (sf_strerror(NULL));
 		return 1;
 	}
+   //Copy samples from the original file to the new file
+  int readcount;
+   
+      for (int i = 0; i < 5; i++)
+      {
+          while((readcount = sf_read_float(inFile, buffer, kBufferSize)) > 0) {
+                  sf_write_float(outFile, buffer, readcount); 
+                  } 
+
+
+          sf_seek(inFile, 0, SEEK_SET);
+      }
  
 
   //Copy samples from the original file to the new file
-  sf_read_float(inFile, buffer, bufferSize);
-  sf_write_float(outFile, buffer, bufferSize); 
+  
+
+  
+  
+  
   
   //Close the open files
   sf_close(inFile);
