@@ -4,7 +4,8 @@
 #include <math.h>
 #include <sndfile.h>
 
-#define kInputFileName "Sinewave"
+#define kInputFileName "Sinewave.wav"
+#define kOutputFileName "Output.wav"
 
 typedef struct SoundFile{
     SNDFILE *FILE;
@@ -41,5 +42,38 @@ int openInputSndFile(SoundFile *inFile){
 
 }
 int createOutputSndFIle(SoundFIle *inFile, SoundFile *outFile){
+    outFile->file = sf_open(kOutputFileName, SFM_WRITE, &inFile->info);
+    if(!outFile->file){
+        printf("Erroropening file\n");
+        print ("%s\n, sf_sfterror")
+    }
     return 0;
 }
+int main (){
+    SoundFile inFile. outFile;
+    int error = openINputSndFile(&inFile);
+    if(error) return 1;
+    sf_count_t bufferSize = inFile.info.frames;
+    //allocate buffers ased innput sound file
+    float *inBuffer = (float *) malloc (bufferSize*sizeof(float));
+    float *outBuffer = (float *) calloc (bufferSize, sizeof(float));
+
+    //read the input file
+    sf_read_float(inFile.file, inBuffer, bufferSize);
+
+    process(inBuffer, outBuffer, bufferSize);
+
+    error = createOutputSndFile(&inFile, &outFile);
+    if (error) return 1; 
+    sf_write_float(outfile.file, outBuffer, bufferSize);
+
+    sf_close(inFile.file);
+    sf_close(outFile.file);
+    free(inBuffer);
+
+    return 0;
+}
+void Process(float *inBuffer, float *outBuffer, sf_count_t bufferSize){
+
+}
+//delay time * decay time *echos *dry/wet

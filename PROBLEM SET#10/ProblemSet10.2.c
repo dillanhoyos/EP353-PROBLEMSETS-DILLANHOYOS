@@ -10,14 +10,7 @@
 //./0.Template
 
 #define kInputFileName "CheeseSynth.wav"
-#define kOutputFileName "Delay.wav"
-#define kDelaytime 0.375
-#define kDecay 0.5
-#define kNumEchos 10
-#define kMix 0.75
-
-float gDelayTime = 1.0f;
-
+#define kOutputFileName "dela.wav"
 
 //Hold SNDFILE and SF_INFO together
 typedef struct SoundFile {
@@ -45,7 +38,6 @@ int main(void){
   float *inBuffer = (float *) malloc(bufferSize*sizeof(float));
   float *outBuffer = (float *) calloc(bufferSize,sizeof(float));
 
-
   // Copy content the file content to the buffer
   sf_read_float(inFile.file, inBuffer, bufferSize);
   
@@ -66,25 +58,24 @@ int main(void){
   return 0;
 }
 
+double i;
+sf_count_t t;
+
 //TODO: Implement your DSP here
-void process(float *inBuffer, float *outBuffer, sf_count_t bufferSize){
-    sf_count_t m;
+void process(float *inBuffer, float *outBuffer, sf_count_t bufferSize)
+{             
 
-    for(sf_count_t n = 0; n < bufferSize; n++){
-        outBuffer[n] - inBuffer[n];
-        for(int i = 1; i <= kNumEchos; i++){
-            m = (int)((float)n - (float)i* gDelayTime);
-            if(m>= 0){
-                //m is an inndex_.
-                // DEcay is an amount and not time 
-                outBuffer[n] += kMix * pow(kDecay, (double)i) * inBuffer[m];
+  for (sf_count_t n = 0; n < bufferSize; n++ ){
 
-            }   
-        }
-    }
+      t =  (0.5*44100);
 
+       
 
-}
+      outBuffer[n] = inBuffer[n] + (outBuffer[n-t] * 0.400);
+  }
+
+  }
+
 
 int openInputSndFile(SoundFile *sndFile){
   //Initialize SF_INFO with 0s (Required for reading)

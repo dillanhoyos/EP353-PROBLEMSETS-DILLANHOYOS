@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,14 +10,9 @@
 //Run with:
 //./0.Template
 
-#define kInputFileName "CheeseSynth.wav"
-#define kOutputFileName "Delay.wav"
-#define kDelaytime 0.375
-#define kDecay 0.5
-#define kNumEchos 10
-#define kMix 0.75
-
-float gDelayTime = 1.0f;
+#define kInputFileName "Bass.wav"
+#define kOutputFileName "Here.wav"
+//#define saturate(x) fmin(fmax(-1.0,x),1.0)
 
 
 //Hold SNDFILE and SF_INFO together
@@ -28,7 +24,7 @@ typedef struct SoundFile {
 //Function prototypes
 int openInputSndFile(SoundFile *inFile);
 int createOutputSndFile(SoundFile *inFile, SoundFile *outFile);
-void process(float *inBuffer, float *outBuffer, sf_count_t bufferSize);
+void BassBoosta(float *inBuffer, float *outBuffer, sf_count_t bufferSize);
 
 int main(void){
   SoundFile inFile, outFile;
@@ -45,12 +41,11 @@ int main(void){
   float *inBuffer = (float *) malloc(bufferSize*sizeof(float));
   float *outBuffer = (float *) calloc(bufferSize,sizeof(float));
 
-
   // Copy content the file content to the buffer
   sf_read_float(inFile.file, inBuffer, bufferSize);
   
   // Process inBuffer and copy the result to outBuffer
-  process(inBuffer, outBuffer, bufferSize);
+  BassBoosta(inBuffer, outBuffer, bufferSize);
   
   // Create output file and write the result
   error = createOutputSndFile(&inFile, &outFile);
@@ -65,25 +60,34 @@ int main(void){
   
   return 0;
 }
+static float selectivity = 140.0;
+static float gain1;
+static float gain2 = 0.7;
+static float ratio = 0.7;
+static float cap;
+
+
+             
+
+float saturate(float sample, float cap){
+
+    return ((sample + cap*ratio)*gain2);
+}
+
 
 //TODO: Implement your DSP here
-void process(float *inBuffer, float *outBuffer, sf_count_t bufferSize){
-    sf_count_t m;
+void BassBoosta(float *inBuffer, float *outBuffer, sf_count_t bufferSize){
+    
+               
 
     for(sf_count_t n = 0; n < bufferSize; n++){
-        outBuffer[n] - inBuffer[n];
-        for(int i = 1; i <= kNumEchos; i++){
-            m = (int)((float)n - (float)i* gDelayTime);
-            if(m>= 0){
-                //m is an inndex_.
-                // DEcay is an amount and not time 
-                outBuffer[n] += kMix * pow(kDecay, (double)i) * inBuffer[m];
 
-            }   
-        }
+        gain1 = 1.0/(selectivity + 1.0);
+        cap = (inBuffer[n] + cap*selectivity )*gain1;
+        outBuffer[n] = saturate(inBuffer[n], cap);
+
+
     }
-
-
 }
 
 int openInputSndFile(SoundFile *sndFile){

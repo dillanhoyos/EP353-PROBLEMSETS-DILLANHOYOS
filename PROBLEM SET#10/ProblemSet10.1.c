@@ -11,13 +11,11 @@
 
 #define kInputFileName "CheeseSynth.wav"
 #define kOutputFileName "Delay.wav"
-#define kDelaytime 0.375
-#define kDecay 0.5
-#define kNumEchos 10
-#define kMix 0.75
-
-float gDelayTime = 1.0f;
-
+#define kDepth 1 // Second
+#define kOffset 1 // Second (Needs to be bigger than or equal to kDepth to avoid negative numbers)
+#define kRate 0.00025 //Hz
+#define kGain 10.0
+#define kLevel 0.5
 
 //Hold SNDFILE and SF_INFO together
 typedef struct SoundFile {
@@ -29,6 +27,9 @@ typedef struct SoundFile {
 int openInputSndFile(SoundFile *inFile);
 int createOutputSndFile(SoundFile *inFile, SoundFile *outFile);
 void process(float *inBuffer, float *outBuffer, sf_count_t bufferSize);
+//Global Variables
+float gOffset, gDepth;
+int gSampleRate;
 
 int main(void){
   SoundFile inFile, outFile;
@@ -44,7 +45,7 @@ int main(void){
   // Allocate buffers for sound processing
   float *inBuffer = (float *) malloc(bufferSize*sizeof(float));
   float *outBuffer = (float *) calloc(bufferSize,sizeof(float));
-
+  float *passBuffer = (float *) malloc(bufferSize*sizeof(float));
 
   // Copy content the file content to the buffer
   sf_read_float(inFile.file, inBuffer, bufferSize);
@@ -68,23 +69,43 @@ int main(void){
 
 //TODO: Implement your DSP here
 void process(float *inBuffer, float *outBuffer, sf_count_t bufferSize){
-    sf_count_t m;
+  sf_count_t m;
+  double rate, t, tau, delta;
+  
+  for(sf_count_t n = 0; n < bufferSize; n++){
+    //flanger
+    outBuffer[n] = inBuffer[n];
+    
+    tau = gOffset + gDepth * sin(2.0 * M_PI * kRate * n / gSampleRate);
+    t = (float)n - tau; // Caluclate the distance of tau to n in samples
+    m = (int)t; // Make the distance into integer for indexing
+    delta = t - (float)m; // Get the fractional part of the distance for amplitude control
+    
+    if (m >= 0 && m + 1 < bufferSize){
+      // Mix original signals based on sample distance
+      outBuffer[n] += delta * inBuffer[m + 1] + (1.0 - delta) * inBuffer[m]; 
 
-    for(sf_count_t n = 0; n < bufferSize; n++){
-        outBuffer[n] - inBuffer[n];
-        for(int i = 1; i <= kNumEchos; i++){
-            m = (int)((float)n - (float)i* gDelayTime);
-            if(m>= 0){
-                //m is an inndex_.
-                // DEcay is an amount and not time 
-                outBuffer[n] += kMix * pow(kDecay, (double)i) * inBuffer[m];
-
-            }   
-        }
+    //fuzz
+    if(outBuffer[n] < 0.0f){
+      outBuffer[n] *= -1.0f; //Rectify the signal (absolute value)
     }
 
+        outBuffer[n] = outBuffer[n] * kGain; //Amplify orignal audio data
+    
+    if(outBuffer[n] > 1.0f){
+        outBuffer[n] = 1.0f; //Clip signal to 1
+    }
 
+        outBuffer[n] *= kLevel; //Adjust volume
+  }
 }
+
+
+ 
+    
+} 
+
+
 
 int openInputSndFile(SoundFile *sndFile){
   //Initialize SF_INFO with 0s (Required for reading)
