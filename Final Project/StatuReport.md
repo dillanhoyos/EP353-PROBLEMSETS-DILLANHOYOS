@@ -5,12 +5,11 @@
 Short answers (at least 3 sentences) for the below questions suffice. If you want to alter your plan for your project (and obtain approval for the same), be sure to rewrite your proposal and email your instructor!
 
 ### What have you done for your project so far?
-I have experiemented with SoundPipe, I compiled all the examples in the soundpipe library, I know how to create a midi Stream, and how to create a wavetable.
-I have been focusing on doinng research and trying to figure out how the code examples are structured to gain understanding on where the connnections are made. 
+I understand how to Use Soundpipe and I am goin to use the Tseg module that creates frequency sweeps to create the laser gun sound FX. Akito sent the code to do batch exports of Files. 
 
 
 ### What have you not done for your project yet?
-I have not implemented a solution for this problem. I need to get Midi Data into the Syntheziser, and create a modular file distribution for the Synthesizer. 
+I have not implemented the randomization of the parameters.
 
 ### What problems, if any, have you encountered?
-I have not been able to use Soundpipe with Port audio or Port Midi,
+I need to create the randomization of the files
