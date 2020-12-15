@@ -22,8 +22,12 @@ The project uses The Module Tseg on SoundPipe, this module is a module that crea
 #### Build and Run Commands
 To Build You need to add the Example to the Examples Folder on the Sound pipe Library, then you can type the command Make on terminal.
 
-Compile on examples Folder : make 
-Run: ./examplesname.bin
+####Compile on examples Folder : 
+make 
+
+
+####Run:
+./examplesname.bin
 
 
 #### Acknowledgment 
